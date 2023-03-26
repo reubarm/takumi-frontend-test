@@ -119,7 +119,7 @@ export default function DataList({ type, data }: any) {
   const { setSelected } = useContext(InfluencerContext);
 
   const handleSelected = (id: string) => {
-    fetch(`http://localhost:3001/${type}/${id}`)
+    fetch(`https://takumi-frontend-express-server.vercel.app/${type}/${id}`)
       .then((response) => response.json())
       .then((data) => setSelected(data));
   };

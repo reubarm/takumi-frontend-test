@@ -1,6 +1,6 @@
 const fetchData = async (type: string) => {
   try {
-    const response = await fetch(`http://localhost:3001/${type}/`);
+    const response = await fetch(`https://takumi-frontend-express-server.vercel.app/${type}/`);
     const data = await response.json();
     return data;
   } catch (error) {

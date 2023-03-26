@@ -42,12 +42,12 @@ export default function DataView({ type, selected }: any) {
   }, []);
   const { setSelected } = useContext(InfluencerContext);
   const handleCampaign = (id: string) => {
-    fetch(`http://localhost:3001/campaigns/${id}`)
+    fetch(`https://takumi-frontend-express-server.vercel.app/campaigns/${id}`)
       .then((response) => response.json())
       .then((data) => setSelected(data));
   };
   const handleInfluencer = (id: string) => {
-    fetch(`http://localhost:3001/influencers/${id}`)
+    fetch(`https://takumi-frontend-express-server.vercel.app/influencers/${id}`)
       .then((response) => response.json())
       .then((data) => setSelected(data));
   };
