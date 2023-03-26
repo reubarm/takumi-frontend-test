@@ -103,7 +103,7 @@ export default function NavigationBar(props: Props) {
             </IconButton>
 
             <Link
-              href="https://github.com/asdf"
+              href="https://github.com/reubarm/takumi-frontend-test"
               color="inherit"
               underline="none"
               target="_blank"
