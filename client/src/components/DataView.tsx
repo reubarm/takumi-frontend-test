@@ -51,6 +51,13 @@ export default function DataView({ type, selected }: any) {
       .then((response) => response.json())
       .then((data) => setSelected(data));
   };
+
+  const getImageSrc = (obj: any): string | undefined => {
+    const imageKeys = ["logo", "avatar", "coverImage"];
+    const imageSrc = imageKeys.find((key) => obj[key]);
+    return imageSrc ? obj[imageSrc] : undefined;
+  };
+
   return (
     <>
       <Content>
@@ -75,7 +82,7 @@ export default function DataView({ type, selected }: any) {
               }}
             >
               <Avatar
-                src={selected?.logo || selected?.avatar || selected?.coverImage}
+                src={getImageSrc(selected)}
                 sx={{ width: 200, height: 200, mb: 2 }}
               />
               <Stack
