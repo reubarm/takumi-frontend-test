@@ -34,6 +34,26 @@ const Children = styled(Card)(({ theme }) => ({
   cursor: "pointer",
 }));
 
+interface Selected {
+  campaigns?: {
+    id: string;
+    name: string;
+    coverImage: string;
+  }[];
+  influencers?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatar: string;
+  }[];
+}
+
+interface Props {
+  selected: Selected;
+  handleCampaign: (id: string) => void;
+  handleInfluencer: (id: string) => void;
+}
+
 export default function DataView({ type, selected }: any) {
   const theme = useTheme();
   const [data, setData] = useState<any[]>([]);
@@ -41,13 +61,11 @@ export default function DataView({ type, selected }: any) {
     setData(selected);
   }, []);
   const { setSelected } = useContext(InfluencerContext);
-  const handleCampaign = (id: string) => {
-    fetch(`https://takumi-frontend-express-server.vercel.app/campaigns/${id}`)
-      .then((response) => response.json())
-      .then((data) => setSelected(data));
-  };
-  const handleInfluencer = (id: string) => {
-    fetch(`https://takumi-frontend-express-server.vercel.app/influencers/${id}`)
+  const EXPRESS_SERVER = process.env.REACT_APP_SERVER_URL;
+
+  // Combine fetch functions into one
+  const handleItemClick = (id: string, itemType: string) => {
+    fetch(`${EXPRESS_SERVER}${itemType}/${id}`)
       .then((response) => response.json())
       .then((data) => setSelected(data));
   };
@@ -56,6 +74,41 @@ export default function DataView({ type, selected }: any) {
     const imageKeys = ["logo", "avatar", "coverImage"];
     const imageSrc = imageKeys.find((key) => obj[key]);
     return imageSrc ? obj[imageSrc] : undefined;
+  };
+
+  // Extracted common styles to a separate object - but this will be added to a "Theme" directory on a bigger project
+  const commonStyles = {
+    color: "white",
+    fontWeight: 600,
+  };
+
+  // Created a function to render the items
+  const renderItems = (
+    items:
+      | {
+          id: string;
+          name?: string;
+          coverImage?: string;
+          firstName?: string;
+          lastName?: string;
+          avatar?: string;
+        }[]
+      | undefined,
+    itemType: string
+  ) => {
+    return items?.map((item) => (
+      <Grid item xs={12} md={4} key={item.id}>
+        <Children onClick={() => handleItemClick(item.id, itemType)}>
+          <Avatar
+            src={item?.coverImage || item?.avatar}
+            sx={{ width: 60, height: 60, mr: 2 }}
+          />
+          <Typography variant="body1" sx={commonStyles}>
+            {item.name || `${item.firstName} ${item.lastName}`}
+          </Typography>
+        </Children>
+      </Grid>
+    ));
   };
 
   return (
@@ -113,62 +166,26 @@ export default function DataView({ type, selected }: any) {
                 </Typography>
               </Stack>
             </Stack>
+
             <Typography
               variant="h3"
               component="h2"
               sx={{
-                color: "white",
+                ...commonStyles,
                 mt: 5,
                 mb: 3,
                 fontSize: "1.7rem",
-                fontWeight: "700",
+                fontWeight: 700,
               }}
             >
-              {selected.campaigns && "Campaigns:"}
-              {selected.influencers && "Influencers:"}
+              {selected.campaigns ? "Campaigns:" : ""}
+              {selected.influencers ? "Influencers:" : ""}
             </Typography>
 
             <Grid container spacing={3}>
-              {selected.campaigns?.map((campaign: any) => (
-                <Grid item xs={12} md={4} key={campaign.id}>
-                  <Children onClick={() => handleCampaign(campaign.id)}>
-                    <Avatar
-                      src={campaign?.coverImage}
-                      sx={{ width: 60, height: 60, mr: 2 }}
-                    />
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        color: "white",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {campaign.name}
-                    </Typography>
-                  </Children>
-                </Grid>
-              ))}
-              {selected.influencers?.map((influencer: any) => (
-                <Grid item xs={12} md={4} key={influencer.id}>
-                  <Children onClick={() => handleInfluencer(influencer.id)}>
-                    <Avatar
-                      src={influencer?.avatar}
-                      sx={{ width: 60, height: 60, mr: 2 }}
-                    />
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        color: "white",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {influencer.firstName} {influencer.lastName}
-                    </Typography>
-                  </Children>
-                </Grid>
-              ))}
+              {renderItems(selected.campaigns, "campaigns")}
+              {renderItems(selected.influencers, "influencers")}
             </Grid>
-            {/* </Stack> */}
           </>
         )}
       </Content>

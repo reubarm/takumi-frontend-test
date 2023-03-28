@@ -112,7 +112,12 @@ export default function NavigationBar(props: Props) {
               <Typography
                 variant="h6"
                 component="div"
-                sx={{ flexGrow: 1, display: { xs: "none", sm: "block" }, letterSpacing: '-1px', fontWeight: '600' }}
+                sx={{
+                  flexGrow: 1,
+                  display: { xs: "none", sm: "block" },
+                  letterSpacing: "-1px",
+                  fontWeight: "600",
+                }}
               >
                 Reuben Test Interview
               </Typography>
@@ -148,7 +153,7 @@ export default function NavigationBar(props: Props) {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },
