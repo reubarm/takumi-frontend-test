@@ -34,26 +34,6 @@ const Children = styled(Card)(({ theme }) => ({
   cursor: "pointer",
 }));
 
-interface Selected {
-  campaigns?: {
-    id: string;
-    name: string;
-    coverImage: string;
-  }[];
-  influencers?: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    avatar: string;
-  }[];
-}
-
-interface Props {
-  selected: Selected;
-  handleCampaign: (id: string) => void;
-  handleInfluencer: (id: string) => void;
-}
-
 export default function DataView({ type, selected }: any) {
   const theme = useTheme();
   const [data, setData] = useState<any[]>([]);
